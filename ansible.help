@@ -1,0 +1,153 @@
+master
+install python3
+yum update -y
+yum install -y python3
+pip3 install
+
+generate ssh-keygen -t rsa on master
+
+add in authorized key local
+
+and master one in others
+
+ssh-copy-id vagrant@192.168.60.5
+doc for ssh copy to work
+/etc/ssh/sshd_config
+https://docs.bitnami.com/virtual-machine/faq/get-started/enable-ssh-password/
+
+install on master
+
+yum install -y epel-release
+sudo yum install -y ansible
+
+
+sudo apt-get update
+sudo apt-get install software-properties-common
+sudo apt-add-repository ppa:ansible/ansible
+sudo apt-get update
+
+on master go to /etc/ansible/hosts
+add ips of other
+```
+[webservers]
+192.168.60.4
+#192.168.60.5
+
+[dbservers]
+192.168.60.6
+
+[main:children]
+webservers
+dbservers
+
+#[webservers:vars]
+#variable pour le group
+# mais:vars pour tt les grp
+```
+
+then to ping all hosts:
+```
+ansible all -m ping -u vagrant
+-u for user in the system like ubuntu/vagrant...
+--ask-pass // to prompt password for ssh connection that requires it
+```
+192.168.60.5 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+192.168.60.4 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+192.168.60.6 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+
+/etc/ansible/hosts
+ansible-inventory --list
+load host config from local file myhosts called inventory
+ansible-inventory --list -i myhosts
+
+ansible all -m ping -i myhosts
+ansible app1 -m ping -i myhosts
+ansible dbserver -m ping -i myhosts
+ansible webservers:\&prod -m ping -i myhosts
+ansible webservers:\!prod -m ping -i myhosts
+
+# Config
+default Config sources
+/etc/ansible/ansible.cfg
+ansible.cfg
+to apply local conf :
+
+ansible-config --help
+list view 
+dump --only-changed
+display diff
+
+now can ping directly from myhosts configurattion declared in ansible.cfg
+locally
+
+ansible webservers:\!prod -m ping
+
+
+
+les commandes sont des taches peuvent etre definis dans les playbook
+
+Module maybe a sql connector for ex
+and command like ping for sql operations
+remote utilities like apt for ubuntu yum for centos /system.d /service...
+module script to transfer script and play it
+ansible-doc -l / list modules
+ansible-doc apt / apt module doc
+
+parallelisme avec fork=number dans la conf 
+ou a lexec avec -f
+ansible webservers -m [module comme ping] -a [args]
+module shell ex
+ansible app1 -m shell -a "echo lol"
+ansible app1 -m command -a "echo lol"
+--become // in sudo
+--ask-become-pass
+ansible -m setup app1 // display install info for app1
+ansible -m setup -a "filter=ansible_distribution" app1 // display distrib
+// filters allow us to search by facts
+
+tasks/facts are collected in playbooks
+
+in /etc/sudoer.d/vagrant
+
+ansible-playbook
+ansible-playbook -i hosts site.yml
+dry run to check simulation
+structure for roles
+roles/
+    common/               # this hierarchy represents a "role"
+        tasks/            #
+            main.yml      #  <-- tasks file can include smaller files if warranted
+        handlers/         #
+            main.yml      #  <-- handlers file
+        templates/        #  <-- files for use with the template resource
+            ntp.conf.j2   #  <------- templates end in .j2
+        files/            #
+            bar.txt       #  <-- files for use with the copy resource
+            foo.sh        #  <-- script files for use with the script resource
+        vars/             #
+            main.yml      #  <-- variables associated with this role
+        defaults/         #
+            main.yml      #  <-- default lower priority variables for this role
+        meta/             #
+            main.yml
+
+
+ping ansible webservers -m uri -a 'url=http://localhost'
