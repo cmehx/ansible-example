@@ -1,0 +1,10 @@
+- name: install ftp serv
+  hosts: webservers
+  become: yes
+  tasks:
+  - name: vsftpd install on non prod webservers
+    when: stage != 'prod'
+    ansible.builtin.package:
+      name:
+        - vsftpd
+      state: latest

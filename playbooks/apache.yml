@@ -26,3 +26,15 @@
       yum:
         name: "{{ apacheservices }}"
         state: present
+    - name: config httpd
+      copy:
+        src: ../app/httpd.conf
+        dest: /etc/httpd/conf/httpd.conf
+      notify: 
+      - restart apache
+
+  handlers:
+    - name: restart apache
+      systemd:
+        name: httpd
+        state: restarted

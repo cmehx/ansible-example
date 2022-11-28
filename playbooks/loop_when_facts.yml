@@ -1,0 +1,8 @@
+# gather debug info ex
+- name: check facts
+  hosts: all
+  gather_facts: yes
+  tasks:
+    - when: ansible_memtotal_mb < 900
+      debug:
+        msg: "The default IP of {{ ansible_nodename }} is {{ ansible_eth1.ipv4.address }}"

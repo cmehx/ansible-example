@@ -151,3 +151,6 @@ roles/
 
 
 ping ansible webservers -m uri -a 'url=http://localhost'
+
+ansible webservers -m fetch -a 'src=/etc/httpd/conf/httpd.conf dest=app/ flat=yes'
+fetch httpd conf in app local folder
