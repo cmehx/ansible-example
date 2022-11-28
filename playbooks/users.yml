@@ -1,0 +1,13 @@
+- name: create linux users
+  hosts: app1
+  become: yes
+  #vars_files: /vars/dbserver
+  tasks:
+  - name: create user
+    user:
+      state: present
+      name: "{{ uname }}"
+      group: "{{ ugroup }}"
+      password: "{{ upasswd }}"
+      home: "{{ uhome }}"
+      shell: "{{ ushell }}"

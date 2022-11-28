@@ -1,0 +1,8 @@
+#file name in group vars must have groupe name as file name
+uname: mehdi
+upasswd: darklol51
+ugroup: wheel
+uhome: /dev/null
+ushell: /bin/false
+services: httpd
+apacheservices: ['php', 'php-mysql', 'git', 'libsemanage-python', 'libselinux-python']

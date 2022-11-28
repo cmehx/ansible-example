@@ -1,0 +1,35 @@
+app1 ansible_host=192.168.60.4
+app2 ansible_host=192.168.60.5
+db ansible_host=192.168.60.6
+
+[web_dev]
+app1
+
+[prod_dev]
+app2
+
+[dbserver]
+db
+
+[webservers:children]
+web_dev
+prod_dev
+
+[prod:children]
+dbserver
+prod_dev
+
+[dev:children]
+dbserver
+web_dev
+
+[webservers:vars]
+ansible_user=vagrant
+
+[dbserver:vars]
+ansible_user=ubuntu
+ansible_ssh_pass=vagrant
+
+[all:vars]
+ansible_password=vagrant
+ansible_port=22

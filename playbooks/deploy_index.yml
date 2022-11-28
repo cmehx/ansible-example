@@ -1,0 +1,11 @@
+- name: deploy html page
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: copy
+      template:
+        src: "../app/{{ stage }}_index.html"
+        dest: /var/www/html/index.html
+        mode: 0644
+        owner: vagrant
+        group: vagrant

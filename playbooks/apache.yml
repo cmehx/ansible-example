@@ -1,0 +1,28 @@
+- name: apache serv
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Install httpd
+      yum:
+        name: httpd
+        state: latest
+    - name: Install git
+      yum:
+        name: git
+        state: latest
+    - name: http service state
+      systemd:
+        name: httpd
+        state: started
+        enabled: yes
+    - name: Creates the index.html file
+      template:
+        src: ../app/index.html
+        dest: /var/www/html/index.html
+        mode: 0644
+        owner: vagrant
+        group: vagrant
+    - name: Install php etc
+      yum:
+        name: "{{ apacheservices }}"
+        state: present

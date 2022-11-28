@@ -1,0 +1,8 @@
+# gather debug info ex
+- name: check facts
+  hosts: webservers
+  gather_facts: yes
+  tasks:
+    - name:
+      debug:
+        msg: "The default IP of {{ ansible_nodename }} is {{ ansible_eth1.ipv4.address }}"

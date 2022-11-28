@@ -1,0 +1,9 @@
+- name: check services
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: 
+      systemd:
+        name: "{{ services }}"
+        state: started
+        enabled: yes

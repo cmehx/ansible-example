@@ -1,0 +1,4 @@
+dbname: sitedb
+# db variables
+dbuser: admin
+upassword: admin
