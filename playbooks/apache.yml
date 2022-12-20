@@ -1,4 +1,4 @@
-- name: apache serv
+- name: Apache serv
   hosts: webservers
   become: yes
   tasks:
@@ -10,7 +10,7 @@
       yum:
         name: git
         state: latest
-    - name: http service state
+    - name: Http service state
       systemd:
         name: httpd
         state: started
@@ -26,15 +26,15 @@
       yum:
         name: "{{ apacheservices }}"
         state: present
-    - name: config httpd
+    - name: Config httpd
       copy:
         src: ../app/httpd.conf
         dest: /etc/httpd/conf/httpd.conf
       notify: 
-      - restart apache
+      - Restart apache
 
   handlers:
-    - name: restart apache
+    - name: Restart apache
       systemd:
         name: httpd
         state: restarted
