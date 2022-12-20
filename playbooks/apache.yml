@@ -1,6 +1,6 @@
 - name: Apache serv
   hosts: webservers
-  become: True
+  become: true
   tasks:
     - name: Install httpd
       yum:
@@ -14,7 +14,7 @@
       systemd:
         name: httpd
         state: started
-        enabled: True
+        enabled: true
     - name: Creates the index.html file
       template:
         src: ../app/index.html
